@@ -1,0 +1,40 @@
+<head>
+    <style>
+        .row {
+            margin: 0px;
+        }
+
+        #card-stack p {
+            /*background: #ddd;*/
+            white-space: pre-wrap;
+            /* <-- THIS PRESERVES THE LINE BREAKS */
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+
+<!--create 2 divs, upper one bigger to show chat messages and lower one holds a text box and a button
+//display timestamp and message in color from humanMessage.color-->
+<div id="card-stack" style="width: 80%; border: 1;" class="row">
+    <h2>BIAN Service Domains Vector Search</h2>
+    <div  class="col-md-12">
+        <div *ngFor="let message of messages">
+            <div *ngIf="message.sender == 'Human'" style="color: {{message.color}}">{{message.sender}}: {{' ' +
+                message.message}}</div>
+            <!--display bot message in black and if not empty-->
+            <div *ngIf="message.sender == 'AI'" style="color: {{message.color}}"><p>{{message.sender}}: {{' ' +
+                message.message}}</p></div>
+
+        </div>
+    </div>
+</div>
+<!--//create a text box and a button on same row-->
+<div style="width: 80%" class="row">
+    <div class="col-md-10">
+        <input type="text" class="form-control" [(ngModel)]="humanMessage.message">
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary" (click)="sendMessage()">Send</button>
+    </div>
+</div>

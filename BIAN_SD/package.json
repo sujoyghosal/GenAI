@@ -1,0 +1,21 @@
+{
+    "name": "vectorsearch",
+    "version": "0.0.0",
+    "description": "Vector Search API",
+    "main": "vector_search.js",
+    "scripts": {
+      "start": "node vector_search.js"
+    },
+    "dependencies": {
+      "body-parser": "1.19.2",
+      "cors": "2.8.5",
+      "https": "1.0.0",
+      "fs": "0.0.1-security",
+      "express": "4.18.1",
+      "http": "0.0.1-security",
+      "mongodb": "4.11.0",
+      "request": "2.88.2",
+      "axios": "1.5.1",
+      "faker": "5.5.3"
+    }
+  }

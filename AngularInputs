@@ -1,0 +1,104 @@
+
+
+Attribute Binding 
+Attribute binding in Angular helps you bind to HTML attributes of elements in your template. This can be useful when you want to dynamically update the appearance or behavior of an element based on some condition. For example, you might want to hide an element unless a user is logged in, or change the color of an element based on its status. To bind to an attribute, you use the square brackets around the attribute name.
+
+Class Binding
+Angular offers various ways to bind data to HTML elements. Class binding is one of them. It allows you to dynamically add or remove CSS classes from an element. This can be useful for applying styles based on certain conditions.
+
+Style Binding
+Style binding is a one-way data binding technique that can be used to set the value of a CSS property on an element. To use style binding, you first need to have a CSS property that you want to bind to an element. 
+
+Become a Skilled Web Developer in Just 9 Months!
+Caltech PGP Full Stack DevelopmentEXPLORE PROGRAMBecome a Skilled Web Developer in Just 9 Months!
+ngModel
+Angular data binding is a two-way process: it can both send and receive data. This means that when you change something in your view, the model updates automatically, and vice versa. The ngModel directive makes this two-way data binding possible.
+
+When you use the ngModel directive, you specify a property of the scope as the value of the directive. This tells Angular to create a two-way binding between the property and the input control. Any changes to the control are automatically reflected in the model, and any changes to the model are automatically reflected in the control.
+
+Types of Data Binding
+Interpolation Binding
+Interpolation is a procedure that allows the user to bind a value to the user interface element. Interpolation binds the data one-way, which means that data moves in one direction from the components to HTML elements. 
+
+components-angular
+
+We’ve added the code for the same below. 
+
+In the app.component.ts file, we’ve created two properties called name and topic. 
+
+export class AppComponent {
+
+  title = 'binding';
+
+  public name = "Simplilearn"
+
+  public topic = "Data Binding"
+
+To interpolate and bind them in the HTML file, type the following code 
+
+<h1 style="text-align: center;">Welcome to {{name}}</h1>
+
+<h2 style="text-align: center;">Welcome to the {{topic}} tutorial</h2>
+
+The output will look like this:
+
+welcome-simplilearn
+
+Property Binding
+Property binding is a one-way data binding mechanism that allows you to set the properties for HTML elements. It involves updating a property value in the component and binding the value to an HTML element in the same view. We use property binding for toggle functionality and sharing data between components. It uses the "[]" syntax for data binding. 
+
+Also Read: How to Learn Angular: Benefits of Angular and Certifications
+
+In the app.component.ts file, I’ve created another property called image and provided the path to the Logo in the assets folder.
+
+public image = "/assets/Logo.png"
+
+In the app.component.html file.
+
+<img [src] = "image" alt="" style="height: 100px; width: 250px" class="center">
+
+The output now looks like this.
+
+welcome-2-simp
+
+Become a Skilled Web Developer in Just 9 Months!
+Caltech PGP Full Stack DevelopmentEXPLORE PROGRAMBecome a Skilled Web Developer in Just 9 Months!
+Event Binding
+Event binding type is when information flows from the view to the component when an event is triggered. The event could be a mouse click or keypress. The view sends the data to update the component. Unsurprisingly, it is the exact opposite of property binding, where the data goes from the component to the view.
+
+view-event
+
+We have created a Subscribe button that displays a “Thank you” message when clicked on. 
+
+<br><button (click)="onClick()">Subscribe to Simplilearn</button></div>
+
+To display the message on the console, we’ve created a function called onClick() in the app.component.ts file. 
+
+onClick(){
+
+    console.log("Thanks for subscribing")
+
+  }
+
+Every time the user clicks on the button, the message is displayed on the console. 
+
+simplilearn-welcome
+
+Two-way Data Binding
+As the name suggests, two-way binding is a mechanism where data flows from the component to the view and back. This binding ensures that the component and view are always in sync. Any changes made on either end are immediately reflected on both. The general syntax to denote two-way data binding is a combination of Square brackets and parentheses "[()]". 
+
+2-way
+
+To illustrate two-way data binding, we’ve created a property with an empty string and an input box for the user to type. Whatever the user provides is displayed on the screen with the help of the property. 
+
+In the .ts file, 
+
+public random = ""
+
+In the .html file, we’ve created an input field
+
+<input [(ngModel)]="random" type="text"> <br>
+
+  {{random}}
+
+We have used the ngModel directive and initialized it to random. We’ve then interpolated the property random. 
