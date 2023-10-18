@@ -1,12 +1,13 @@
 //create a Node.js app and import faker.js
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const port = 3000
 app.use(express.static('public'))
 app.use(express.json())
 
 const axios = require('axios')
-const openai_key = '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' // Replace with your OpenAI key.
+const openai_key = process.env.OPENAI_API_KEY // Replace with your OpenAI key.
 //connect to MongoDB
 const { MongoClient, ServerApiVersion } = require('mongodb')
 const uri =
@@ -54,8 +55,7 @@ async function getEmbedding (query) {
     url: 'https://api.openai.com/v1/embeddings',
     headers: {
       'Content-Type': 'application/json',
-      Authorization:
-        'Bearer ' + openai_key
+      Authorization: 'Bearer ' + openai_key
     },
     data: data
   }
@@ -134,10 +134,10 @@ async function doSearch (query, res) {
         doc.paths.forEach(path => {
           var e = {}
           e['SD Endpoint ' + i] = path.path
-          //e['verb'] = path.verb
-          //e['description'] = path.value.description
+          e['verb'] = path.verb
+          e['description'] = path.value.description
           e['Service Domain BQs'] = path.value.tags
-
+          console.log(e);
           object.endpoints.push(e)
           i++
         })
@@ -162,13 +162,16 @@ async function getAnswer (query, documents, res) {
     query +
     ' from the following JSON documents: ' +
     documents +
-    '\n\n Format the response as a bot responding to user query \
-    and do no mention that you are reading JSONs. Format response as bullet points where applicable. Answer:'
+    '\n\n  \
+    Format the response as a bot responding to user query and do no mention that you are reading JSONs. \
+    Format response as bullet points where applicable. \
+    Add a dotted line between response blocks pertaining to different Service Domains. \
+    Answer:'
   let data = JSON.stringify({
     model: 'gpt-3.5-turbo-instruct',
     prompt: prompt,
     max_tokens: 1700,
-    temperature: 0.8
+    temperature: 0.2
   })
 
   let config = {
@@ -177,8 +180,7 @@ async function getAnswer (query, documents, res) {
     url: 'https://api.openai.com/v1/completions',
     headers: {
       'Content-Type': 'application/json',
-      Authorization:
-        'Bearer ' + openai_key
+      Authorization: 'Bearer ' + openai_key
     },
     data: data
   }
@@ -188,25 +190,31 @@ async function getAnswer (query, documents, res) {
     .then(response => {
       console.log(`${response.data.choices[0].text}`)
       var json = {
-        'query': query,
-        'documents': documents,
-        'answer': `${response.data.choices[0].text}`
+        query: query,
+        documents: documents,
+        answer: `${response.data.choices[0].text}`
       }
-      res.jsonp(json);
+      res.jsonp(json)
     })
     .catch(error => {
       console.log(error)
     })
 }
 //create express route named vectorsearch
-app.post('/vectorsearch', async (req, res) => {
+app.get('/vectorsearch', async (req, res) => {
   //console.log(req.body)
-  const query = req.body.query
+  const query = req.query.query;
   console.log('Query: ' + query)
-  await doSearch(query,res).then(() => {
+  await doSearch(query, res).then(() => {
     //res.send('Query: ' + query)
-  });
+  })
 })
+var whitelist = ['http://localhost:4200', 'http://localhost:8080']
+app.use(
+  cors({
+    origin: whitelist
+  })
+)
 //create an express server
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
