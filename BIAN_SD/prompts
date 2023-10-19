@@ -1,0 +1,158 @@
+Here is a BIAN Payment Initiation request payload: 
+        PaymentInitiationTransaction:
+          type: object
+          properties:
+            PaymentTransactionType:
+              type: string
+              description: "\n"
+              format: string
+            RecurringPaymentRecord:
+              type: string
+              description: "\n"
+              format: string
+            RecurringPaymentCustomerReference:
+              type: string
+              description: "\n"
+              format: object
+            RecurringPaymentReference:
+              type: string
+              description: "\n"
+              format: object
+            PayerReference:
+              type: string
+              description: "\n"
+              format: object
+            PayerBankReference:
+              type: string
+              description: "\n"
+              format: object
+            PayerProductInstanceReference:
+              type: string
+              description: "\n"
+              format: object
+            PayeeReference:
+              type: string
+              description: "\n"
+              format: object
+            PayeeBankReference:
+              type: string
+              description: "\n"
+              format: object
+            PayeeProductInstanceReference:
+              type: string
+              description: "\n"
+              format: object
+            Amount:
+              type: string
+              description: "\n"
+              format: string
+            Currency:
+              type: string
+              description: "\n"
+              format: string
+            DateType:
+              type: string
+              description: "\n"
+              format: string
+            PaymentMechanism:
+              type: string
+              description: "\n"
+              format: string
+            PaymentPurpose:
+              type: string
+              description: "\n"
+              format: string
+            DocumentDirectoryEntryInstanceReference:
+              type: string
+              description: "\n"
+              format: object
+            DocumentContent:
+              type: string
+              description: "\n"
+              format: string
+      description: 'Input: InCR Initiate a payment transaction'
+
+Create a Java method that maps the above model to my target JSON model which has the following attributes:
+"transactionType, description, amount, currency, date, payeeBankID, payerID, PayeeBankName, PayeeBankBranch, paymentInstrument".
+Make sure attributes from source model logically match mapped attributes in target model.
+--------------------------------------------------------------------------------------------------------
+
+Act as a business analyst trying to map BIAN Payment Initiation request payload to a target JSON model. Here is my BIAN model:
+        PaymentInitiationTransaction:
+          type: object
+          properties:
+            PaymentTransactionType:
+              type: string
+              description: "\n"
+              format: string
+            RecurringPaymentRecord:
+              type: string
+              description: "\n"
+              format: string
+            RecurringPaymentCustomerReference:
+              type: string
+              description: "\n"
+              format: object
+            RecurringPaymentReference:
+              type: string
+              description: "\n"
+              format: object
+            PayerReference:
+              type: string
+              description: "\n"
+              format: object
+            PayerBankReference:
+              type: string
+              description: "\n"
+              format: object
+            PayerProductInstanceReference:
+              type: string
+              description: "\n"
+              format: object
+            PayeeReference:
+              type: string
+              description: "\n"
+              format: object
+            PayeeBankReference:
+              type: string
+              description: "\n"
+              format: object
+            PayeeProductInstanceReference:
+              type: string
+              description: "\n"
+              format: object
+            Amount:
+              type: string
+              description: "\n"
+              format: string
+            Currency:
+              type: string
+              description: "\n"
+              format: string
+            DateType:
+              type: string
+              description: "\n"
+              format: string
+            PaymentMechanism:
+              type: string
+              description: "\n"
+              format: string
+            PaymentPurpose:
+              type: string
+              description: "\n"
+              format: string
+            DocumentDirectoryEntryInstanceReference:
+              type: string
+              description: "\n"
+              format: object
+            DocumentContent:
+              type: string
+              description: "\n"
+              format: string
+      description: 'Input: InCR Initiate a payment transaction'
+  
+  Here is my target model:
+  ["transactionType, description, amount, currency, date, payeeBankID, payeeID, payerID,
+   PayeeBankName, PayeeBankBranch, paymentInstrument, payerBankID, payeeBankAccountNumber, payerBankAccountNumber"]
+Create a mapping from BIAN model attributes to my target model attributes. Format the response with source and target model attributes in same line with an arrow in between
+Show mapped attributes only and list unmapped attributes in different color.

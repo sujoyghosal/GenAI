@@ -29,14 +29,20 @@ export class ChatClientService {
       .pipe(retry(3), catchError(this.httpErrorHandler))
   }
 
-  getVectorSearchResponse(data: string): Observable<string> {
+  getVectorSearchResponse2(data: string): Observable<string> {
     return this.httpClient.post<string>(this.restUrl, data, this.httpOptions)
     .pipe(
        retry(3),
        catchError(this.httpErrorHandler)
     );
  }
-
+ getVectorSearchResponse(data: string): Observable<string> {
+  return this.httpClient.get<string>(this.restUrl + '?query=' + data,  this.httpOptions)
+  .pipe(
+     retry(3),
+     catchError(this.httpErrorHandler)
+  );
+}
   private httpErrorHandler (error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       console.error(

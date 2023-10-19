@@ -8,6 +8,10 @@ app.use(express.json())
 
 const axios = require('axios')
 const openai_key = process.env.OPENAI_API_KEY
+const OpenAIApi = require('openai');
+const openai = new OpenAIApi({
+    api_key: openai_key
+  });
 //console.log(openai_key)
 //connect to MongoDB
 const { MongoClient, ServerApiVersion } = require('mongodb')
@@ -23,25 +27,6 @@ const client = new MongoClient(uri, {
   }
 })
 
-//import faker.js
-const faker = require('faker')
-
-//create 100 fake documents and insert them into MongoDB
-async function createFakeDocuments () {
-  const documents = []
-  for (let i = 0; i < 100; i++) {
-    const document = {
-      name: faker.commerce.productName(),
-      description: faker.commerce.productDescription(),
-      embedding: await getEmbedding(faker.commerce.productDescription())
-    }
-    documents.push(document)
-  }
-  console.log('Inserting documents to Mongo DB...')
-  client.connect()
-  const collection = client.db('BIANDemo').collection('BIANServiceDomains')
-  await collection.insertMany(documents)
-}
 
 //create a function to get embedding
 async function getEmbedding (query) {
@@ -68,8 +53,15 @@ async function getEmbedding (query) {
     throw new Error(`Failed to get embedding. Status code: ${response.status}`)
   }
 }
-//createFakeDocuments();
-//function to do vector search on MongoDB collection
+//create a function to get embedding with gpt4 embeddings.create
+async function getEmbedding2 (query) {
+  const embedding = await openai.embeddings.create({
+    engine: "text-embedding-ada-002",
+    prompt: query,
+  });
+  console.log(embedding)
+  return embedding.data[0].embedding
+}
 async function findSimilarDocuments (embedding) {
   const url = uri
   const client = new MongoClient(url)
@@ -98,7 +90,7 @@ async function findSimilarDocuments (embedding) {
             knnBeta: {
               vector: embedding,
               path: 'embedding',
-              k: 1
+              k: 3
             }
           }
         },
@@ -148,8 +140,9 @@ async function doSearch (query, res) {
         docs.push(queryJSON)
       })
       console.log(docs.length)
+      console.log('Answer:')
       getAnswer(query, JSON.stringify(docs), res).then(async answer => {
-        console.log('Answer:')
+        console.log('Done:')
       })
     })
   })
@@ -159,7 +152,7 @@ async function doSearch (query, res) {
 //doSearch(query)
 
 //call OpenAI completion API with the query and vector search results
-async function getAnswer (query, documents, res) {
+async function getAnswer2 (query, documents, res) {
   const axios = require('axios')
   var prompt =
     'Answer the question below:\n\n' +
@@ -206,6 +199,41 @@ async function getAnswer (query, documents, res) {
       console.log(error)
     })
 }
+
+//create a getAnswer function using openai.chat.completions.create
+async function getAnswer (query, documents, res) {
+  var prompt =
+    'Answer the question below:\n\n' +
+    query +
+    ' from the following JSON documents: ' +
+    documents +
+    '\n\n \
+    . List as bullet points and always start with Service Domain name in response. \
+    Try to restrict response related to Service Domains in question. \n\n \
+     \n\n \
+    Answer:'
+  const chatCompletion = await openai.chat.completions.create({
+    model: "gpt-4",
+    messages: [{"role": "user", "content": prompt}],
+    max_tokens: 3000,
+    temperature: 0.9,
+    /*top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0.6,
+    stop: ["\n", " Human:", " AI:"]*/
+  });
+  console.log(JSON.stringify(chatCompletion.choices[0].message.content));
+  var json = {
+    query: query,
+    documents: documents,
+    answer: `${chatCompletion.choices[0].message.content}`
+  }
+  res.send(json.answer);
+}
+
+
+
+
 var whitelist = ['http://localhost:8000', 'http://localhost:4200']
 app.use(
   cors({

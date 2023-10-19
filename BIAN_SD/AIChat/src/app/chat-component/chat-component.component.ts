@@ -111,13 +111,7 @@ export class ChatComponentComponent implements OnInit {
     })
   }
   async getAIMessage (message: string) {
-    //create a JSON object with the input message
-    var d = { query: message }
-    var s = JSON.stringify(d)
-    //call the getVectorSearchResponse function from the ChatClientService
-    //and pass the JSON object
-
-    this.restService.getVectorSearchResponse(s).subscribe((response: any) => {
+    this.restService.getVectorSearchResponse(message).subscribe((response: any) => {
       //console.log('success - response=' + JSON.stringify(response.answer))
       //if response.answer begins with a newline character, remove it
 
